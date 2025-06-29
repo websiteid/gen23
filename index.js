@@ -491,34 +491,7 @@ async function showMainMenu(ctx) {
         ctx.reply(`✅ Broadcast selesai.\n📤 Berhasil: ${success}\n❌ Gagal: ${failed}`);
       });
     });
-
-
-    bot.command('export', (ctx) => {
-      if (!ADMIN_CHAT_IDS.includes(ctx.chat.id.toString())) {
-        return ctx.reply('❌ Kamu tidak punya akses ke perintah ini.');
-      }
-
-      db.all(`SELECT * FROM orders`, [], (err, rows) => {
-        if (err || rows.length === 0) {
-          return ctx.reply('❌ Gagal mengambil data atau data kosong.');
-        }
-
-        try {
-          const fields = ['id', 'user_id', 'paket', 'timestamp', 'status', 'expired_at', 'kicked'];
-          const opts = { fields };
-          const parser = new Parser(opts);
-          const csv = parser.parse(rows);
-
-          const filePath = path.join(__dirname, 'orders_export.csv');
-          fs.writeFileSync(filePath, csv);
-
-          ctx.replyWithDocument({ source: filePath, filename: 'orders_export.csv' });
-        } catch (e) {
-          console.error(e);
-          ctx.reply('❌ Gagal mengekspor data.');
-        }
-      });
-    });
+      
 
     bot.command('tendang', (ctx) => {
     if (!ADMIN_CHAT_IDS.includes(ctx.chat.id.toString())) {
